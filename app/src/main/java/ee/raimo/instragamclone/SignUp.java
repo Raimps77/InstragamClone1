@@ -15,6 +15,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     private TextView txtGetData;
 
     private Button btnGetAllData;
+
+    private Button btnTransition;
 
     private String allKickBoxers;
 
@@ -47,6 +50,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         txtGetData = findViewById(R.id.txtGetData);
 
         btnGetAllData = findViewById(R.id.btnGetAllData);
+
+        btnTransition = findViewById(R.id.btnNextActivity);
 
         txtGetData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +79,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                 allKickBoxers = "";
 
                 ParseQuery<ParseObject> queryall = ParseQuery.getQuery("KickBoxer");
+
+                // queryall.whereGreaterThan("punchPower", 900);
+                queryall.whereGreaterThanOrEqualTo("punchPower", 2);
+                queryall.setLimit(3);
+
                 queryall.findInBackground(new FindCallback <ParseObject>() {
                     @Override
                     public void done(List<ParseObject> objects, ParseException e) {
@@ -100,6 +110,13 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                 });
             }
         });
+
+        btnTransition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
@@ -117,17 +134,17 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                 public void done(ParseException e) {
 
                     if (e == null) {
-                        Toast.makeText(SignUp.this, kickBoxer.get("name") + " Kikpoxer on salvestatud serverisse", Toast.LENGTH_SHORT).show();
+                        FancyToast.makeText(SignUp.this,kickBoxer.get("name") + " on salvestatud serverisse",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,true).show();
                     } else {
 
-                        Toast.makeText(SignUp.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                        FancyToast.makeText(SignUp.this, e.getMessage(),FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
 
                     }
                 }
             });
         } catch (Exception e) {
 
-            Toast.makeText(SignUp.this, e.getMessage(), Toast.LENGTH_LONG).show();
+            FancyToast.makeText(SignUp.this, e.getMessage(),FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
 
         }
     }
